@@ -1,18 +1,18 @@
+/* Tailwind CSS directives - MUST be at the very top */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Global styles for the application */
 :root {
-  /* Font family: Inter, with system font fallbacks */
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif; /* Use the Roboto font */
   line-height: 1.5;
   font-weight: 400;
 
-  /* Default to light mode colors, overridden by dark mode class on body */
-  color-scheme: light dark;
-  color: #213547; /* Dark text for light mode */
-  background-color: #ffffff; /* Light background for light mode */
+  /* Light mode default colors */
+  color-scheme: light;
+  color: theme('colors.text-light');
+  background-color: theme('colors.app-light');
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,22 +20,32 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode specific styles */
-/* These styles will apply when the 'dark' class is present on the html or body element */
+/* Dark mode specific styles applied when 'dark' class is present on html/body */
 html.dark, body.dark {
-  color: rgba(255, 255, 255, 0.87); /* Light text for dark mode */
-  background-color: #242424; /* Dark background for dark mode */
+  color-scheme: dark;
+  color: theme('colors.text-dark');
+  background-color: theme('colors.app-dark');
 }
 
-/* Basic link styling */
+/* Basic link styling - using primary colors */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: theme('colors.primary-light'); /* Light mode link color */
   text-decoration: inherit;
+  transition: color 0.2s ease-in-out;
 }
 a:hover {
-  color: #535bf2;
+  color: theme('colors.primary-darker-light'); /* Light mode link hover */
 }
+
+/* Dark mode link styling */
+html.dark a {
+  color: theme('colors.primary-dark');
+}
+html.dark a:hover {
+  color: theme('colors.primary-lighter-dark');
+}
+
 
 /* Body styling: ensures full height and centers content (useful for dev server) */
 body {
@@ -50,31 +60,39 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-weight: 700; /* Make headings bold */
 }
 
-/* Button styling (basic for non-Tailwind buttons or as a fallback) */
+/* Base button styling (for non-Tailwind buttons or as a fallback) */
 button {
-  border-radius: 8px;
+  border-radius: theme('borderRadius.lg'); /* Medium roundness */
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a; /* Dark background for dark mode buttons */
+  background-color: theme('colors.gray.200'); /* Default light mode button background */
+  color: theme('colors.gray.800'); /* Default light mode button text */
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s ease-in-out;
+  box-shadow: theme('boxShadow.md'); /* Subtle shadow for depth */
 }
 button:hover {
-  border-color: #646cff;
+  border-color: theme('colors.primary-light');
+  background-color: theme('colors.gray.300');
+  box-shadow: theme('boxShadow.lg');
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto theme('colors.primary-light');
 }
 
-/* Light mode button override (if button is not using specific Tailwind classes) */
-@media (prefers-color-scheme: light) {
-  button {
-    background-color: #f9f9f9; /* Light background for light mode buttons */
-  }
+/* Dark mode button styling */
+html.dark button {
+  background-color: theme('colors.gray.700'); /* Default dark mode button background */
+  color: theme('colors.gray.200'); /* Default dark mode button text */
+}
+html.dark button:hover {
+  border-color: theme('colors.primary-dark');
+  background-color: theme('colors.gray.600');
 }

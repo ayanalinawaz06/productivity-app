@@ -3,6 +3,7 @@ import NoteForm from '../../components/NoteForm';
 import NoteList from '../../components/NoteList';
 import { useNotes } from './useNotes';
 import type { Note } from './types';
+import toast from 'react-hot-toast';
 
 const NotesPage: React.FC = () => {
     const { notes, addNote, updateNote, deleteNote, toggleFavorite, searchTerm, setSearchTerm, sortBy, setSortBy } = useNotes();
@@ -13,6 +14,7 @@ const NotesPage: React.FC = () => {
     const handleAddNote = (newNoteData: Omit<Note, 'id' | 'isFavorite' | 'createdAt' | 'updatedAt'>) => {
         addNote(newNoteData);
         setIsFormVisible(false);
+        toast.success('Note added successfully!');
     };
 
     const handleEditNote = (note: Note) => {
@@ -25,12 +27,28 @@ const NotesPage: React.FC = () => {
             updateNote({ ...noteToEdit, ...updatedData });
             setNoteToEdit(undefined);
             setIsFormVisible(false);
+            toast.success('Note updated successfully!');
         }
     };
 
     const handleCancelForm = () => {
         setIsFormVisible(false);
         setNoteToEdit(undefined);
+    };
+
+    const handleDeleteNote = (id: string) => {
+        deleteNote(id);
+        toast.error('Note deleted!');
+    };
+
+    const handleToggleFavorite = (id: string) => {
+        toggleFavorite(id);
+        const note = notes.find(n => n.id === id);
+        if (note && !note.isFavorite) {
+            toast.success('Note marked as favorite! ⭐');
+        } else {
+            toast('Note unfavorited.');
+        }
     };
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,8 +112,8 @@ const NotesPage: React.FC = () => {
                 <NoteList
                     notes={notes}
                     onEdit={handleEditNote}
-                    onDelete={deleteNote}
-                    onToggleFavorite={toggleFavorite}
+                    onDelete={handleDeleteNote}
+                    onToggleFavorite={handleToggleFavorite}
                 />
             </div>
         </div>

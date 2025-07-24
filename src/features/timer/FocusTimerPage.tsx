@@ -1,5 +1,7 @@
+// src/features/timer/FocusTimerPage.tsx
 import React, { useState } from 'react';
 import { usePomodoro } from '../../hooks/usePomodoro';
+import toast from 'react-hot-toast'; // Import toast
 
 const FocusTimerPage: React.FC = () => {
     const {
@@ -21,10 +23,12 @@ const FocusTimerPage: React.FC = () => {
         DEFAULT_BREAK_DURATION,
     } = usePomodoro();
 
+    // State for showing custom duration inputs
     const [showCustomDurations, setShowCustomDurations] = useState(false);
     const [customFocusInput, setCustomFocusInput] = useState(String(focusDuration / 60));
     const [customBreakInput, setCustomBreakInput] = useState(String(breakDuration / 60));
 
+    // Handle setting custom durations
     const handleSetCustomDurations = () => {
         const newFocus = parseInt(customFocusInput) * 60;
         const newBreak = parseInt(customBreakInput) * 60;
@@ -37,8 +41,53 @@ const FocusTimerPage: React.FC = () => {
         }
         resetTimer();
         setShowCustomDurations(false);
+        toast.success('Timer durations updated!'); // Added toast
     };
 
+    // Original playSound function, updated to include toast based on timer mode
+    // (This part is handled internally by usePomodoro, so we'll adjust usePomodoro)
+    // For timer completion toast, it's better to add inside usePomodoro where playSound is called
+    // or return a flag from usePomodoro for toast on completion.
+    // Let's modify usePomodoro slightly for a more integrated toast experience here.
+
+    // Re-check usePomodoro, specifically where `playSound()` is called.
+    // We want a toast to appear there.
+
+    // *******************************************************************
+    // IMPORTANT: Make this change in src/hooks/usePomodoro.ts as well
+    // Import toast: `import toast from 'react-hot-toast';`
+    // Add toast messages inside the `useEffect` where `timeLeft === 0`
+    // *******************************************************************
+    /*
+    // src/hooks/usePomodoro.ts (Relevant section after importing toast)
+    useEffect(() => {
+        if (isRunning && timeLeft > 0) {
+            // ... timer logic ...
+        } else if (timeLeft === 0) {
+            playSound();
+            if (timerMode === 'focus') {
+                setPomodoroStats((prevStats) => ({
+                    ...prevStats,
+                    cycles: prevStats.cycles + 1,
+                }));
+                setTimerMode('break');
+                setTimeLeft(breakDuration);
+                toast.success(`Focus session complete! Take a ${breakDuration / 60}-minute break. 🎉`); // ADD THIS LINE
+            } else {
+                setTimerMode('focus');
+                setTimeLeft(focusDuration);
+                toast.info(`Break session complete! Time to focus for ${focusDuration / 60} minutes.`); // ADD THIS LINE
+            }
+            setIsRunning(false);
+            clearInterval(intervalRef.current!);
+            intervalRef.current = null;
+        }
+        // ... cleanup ...
+    }, [isRunning, timeLeft, timerMode, focusDuration, breakDuration, playSound, setPomodoroStats]);
+    */
+    // *******************************************************************
+
+    // Calculate progress percentage for visual feedback
     const maxDuration = timerMode === 'focus' ? focusDuration : breakDuration;
     const progressPercentage = maxDuration > 0 ? (rawTimeLeft / maxDuration) * 100 : 0;
 
@@ -46,6 +95,7 @@ const FocusTimerPage: React.FC = () => {
         <div className="p-6 bg-gray-50 dark:bg-gray-800 min-h-screen flex flex-col items-center justify-center">
             <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-700 dark:text-indigo-400">Pomodoro Focus Timer</h1>
 
+            {/* Timer Display */}
             <div
                 className={`relative w-64 h-64 rounded-full flex items-center justify-center text-5xl font-bold transition-all duration-300
                     ${timerMode === 'focus' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}
@@ -90,6 +140,7 @@ const FocusTimerPage: React.FC = () => {
                 </button>
             </div>
 
+            {/* Custom Duration Toggle */}
             <button
                 onClick={() => setShowCustomDurations(!showCustomDurations)}
                 className="mt-8 text-blue-600 dark:text-blue-400 hover:underline"
@@ -97,6 +148,7 @@ const FocusTimerPage: React.FC = () => {
                 {showCustomDurations ? 'Hide Custom Durations' : 'Set Custom Durations'}
             </button>
 
+            {/* Custom Duration Inputs */}
             {showCustomDurations && (
                 <div className="mt-4 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md flex flex-col space-y-4">
                     <div className="flex items-center space-x-2">

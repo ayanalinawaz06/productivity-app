@@ -1,8 +1,10 @@
+// src/features/tasks/TasksPage.tsx
 import React, { useState } from 'react';
 import TaskForm from '../../components/TaskForm';
 import TaskList from '../../components/TaskList';
 import { useTasks } from './useTasks';
 import type { Task } from './types';
+import toast from 'react-hot-toast';
 
 const TasksPage: React.FC = () => {
     const { tasks, addTask, updateTask, deleteTask, markTaskComplete, filter, setFilter, sort, setSort } = useTasks();
@@ -13,6 +15,7 @@ const TasksPage: React.FC = () => {
     const handleAddTask = (newTaskData: Omit<Task, 'id' | 'status'>) => {
         addTask(newTaskData);
         setIsFormVisible(false);
+        toast.success('Task added successfully!');
     };
 
     const handleEditTask = (task: Task) => {
@@ -25,12 +28,27 @@ const TasksPage: React.FC = () => {
             updateTask({ ...taskToEdit, ...updatedData });
             setTaskToEdit(undefined);
             setIsFormVisible(false);
+            toast.success('Task updated successfully!');
         }
     };
 
     const handleCancelForm = () => {
         setIsFormVisible(false);
         setTaskToEdit(undefined);
+    };
+
+    const handleDeleteTask = (id: string) => {
+        deleteTask(id);
+        toast.error('Task deleted!');
+    };
+
+    const handleMarkTaskComplete = (id: string, completed: boolean) => {
+        markTaskComplete(id, completed);
+        if (completed) {
+            toast.success('Task completed! 🎉');
+        } else {
+            toast('Task marked pending.');
+        }
     };
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -99,9 +117,9 @@ const TasksPage: React.FC = () => {
                 <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Your Tasks</h2>
                 <TaskList
                     tasks={tasks}
-                    onToggleComplete={markTaskComplete}
+                    onToggleComplete={handleMarkTaskComplete}
                     onEdit={handleEditTask}
-                    onDelete={deleteTask}
+                    onDelete={handleDeleteTask}
                 />
             </div>
         </div>
