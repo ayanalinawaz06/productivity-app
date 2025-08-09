@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 function getStoredValue<T>(key: string, defaultValue: T): T {
     try {
         const saved = localStorage.getItem(key);
-        if (saved) {
+        if (saved !== null) {
             return JSON.parse(saved) as T;
         }
     } catch (error) {
         console.error("Error parsing localStorage key:", key, error);
+        return defaultValue;
     }
     return defaultValue;
 }

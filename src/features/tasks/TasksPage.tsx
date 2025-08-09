@@ -60,7 +60,7 @@ const TasksPage: React.FC = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-800 min-h-screen">
+        <div className="p-4 sm:p-6 min-h-[calc(100vh-64px)]">
             <h1 className="text-4xl font-extrabold text-center mb-8 text-blue-700 dark:text-blue-400">Task Manager</h1>
 
             <div className="max-w-3xl mx-auto mb-8">
@@ -85,27 +85,27 @@ const TasksPage: React.FC = () => {
                 )}
             </div>
 
-            <div className="max-w-3xl mx-auto mb-6 flex justify-between items-center bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
-                <div>
+            <div className="max-w-3xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
+                <div className="w-full sm:w-auto">
                     <label htmlFor="filter" className="sr-only">Filter Tasks</label>
                     <select
                         id="filter"
                         value={filter}
                         onChange={handleFilterChange}
-                        className="py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
+                        className="w-full py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
                     >
                         <option value="All">All Tasks</option>
                         <option value="Today">Due Today</option>
                         <option value="Completed">Completed</option>
                     </select>
                 </div>
-                <div>
+                <div className="w-full sm:w-auto">
                     <label htmlFor="sort" className="sr-only">Sort Tasks</label>
                     <select
                         id="sort"
                         value={sort}
                         onChange={handleSortChange}
-                        className="py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
+                        className="w-full py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
                     >
                         <option value="dueDate">Sort by Due Date</option>
                         <option value="priority">Sort by Priority</option>

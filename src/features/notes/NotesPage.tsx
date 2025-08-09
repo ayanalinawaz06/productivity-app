@@ -60,7 +60,7 @@ const NotesPage: React.FC = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-800 min-h-screen">
+        <div className="p-4 sm:p-6 min-h-[calc(100vh-64px)]">
             <h1 className="text-4xl font-extrabold text-center mb-8 text-purple-700 dark:text-purple-400">Notes App</h1>
 
             <div className="max-w-4xl mx-auto mb-8">
@@ -85,21 +85,21 @@ const NotesPage: React.FC = () => {
                 )}
             </div>
 
-            <div className="max-w-4xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
+            <div className="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md">
                 <input
                     type="text"
                     placeholder="Search by title or tag..."
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="w-full md:w-2/3 py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white"
+                    className="w-full sm:w-2/3 py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white"
                 />
-                <div>
+                <div className="w-full sm:w-auto">
                     <label htmlFor="sortNotes" className="sr-only">Sort Notes</label>
                     <select
                         id="sortNotes"
                         value={sortBy}
                         onChange={handleSortChange}
-                        className="py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white"
+                        className="w-full py-2 px-3 border border-gray-300 dark:border-gray-500 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-600 dark:text-white"
                     >
                         <option value="newest">Newest First</option>
                         <option value="oldest">Oldest First</option>

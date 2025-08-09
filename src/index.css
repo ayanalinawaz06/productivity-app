@@ -1,18 +1,15 @@
-/* Tailwind CSS directives - MUST be at the very top */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles for the application */
 :root {
-  font-family: 'Roboto', sans-serif; /* Use the Roboto font */
+  font-family: 'Roboto', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  /* Light mode default colors */
   color-scheme: light;
-  color: theme('colors.text-light');
-  background-color: theme('colors.app-light');
+  color: var(--color-text-light);
+  background-color: var(--color-app-light);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,41 +17,50 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode specific styles applied when 'dark' class is present on html/body */
 html.dark, body.dark {
   color-scheme: dark;
-  color: theme('colors.text-dark');
-  background-color: theme('colors.app-dark');
+  color: var(--color-text-dark);
+  background-color: var(--color-app-dark);
 }
 
-/* Basic link styling - using primary colors */
 a {
   font-weight: 500;
-  color: theme('colors.primary-light'); /* Light mode link color */
+  color: var(--color-primary-light);
   text-decoration: inherit;
   transition: color 0.2s ease-in-out;
 }
 a:hover {
-  color: theme('colors.primary-darker-light'); /* Light mode link hover */
+  color: var(--color-primary-darker-light);
 }
 
 /* Dark mode link styling */
 html.dark a {
-  color: theme('colors.primary-dark');
+  color: var(--color-primary-dark);
 }
 html.dark a:hover {
-  color: theme('colors.primary-lighter-dark');
+  color: var(--color-primary-lighter-dark);
 }
 
 
-/* Body styling: ensures full height and centers content (useful for dev server) */
+/* Body styling: ensures full height and allows #root to control content */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  /* Removed display: flex and place-items: center from body */
+  /* This allows the #root element to manage its own layout */
 }
+
+/* Target the #root div where your React app mounts */
+#root {
+  display: flex; /* Make #root a flex container */
+  flex-direction: column; /* Stack children vertically */
+  min-height: 100vh; /* Ensure #root fills the entire viewport height */
+  width: 100%; /* Ensure #root takes full width */
+  /* Remove any explicit centering here, Layout.tsx will handle content centering */
+  /* For example, Layout has 'container mx-auto p-4' for its main section */
+}
+
 
 /* Heading styling */
 h1 {
@@ -65,34 +71,34 @@ h1 {
 
 /* Base button styling (for non-Tailwind buttons or as a fallback) */
 button {
-  border-radius: theme('borderRadius.lg'); /* Medium roundness */
+  border-radius: var(--borderRadius-lg);
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: theme('colors.gray.200'); /* Default light mode button background */
-  color: theme('colors.gray.800'); /* Default light mode button text */
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-800);
   cursor: pointer;
   transition: all 0.25s ease-in-out;
-  box-shadow: theme('boxShadow.md'); /* Subtle shadow for depth */
+  box-shadow: var(--boxShadow-md);
 }
 button:hover {
-  border-color: theme('colors.primary-light');
-  background-color: theme('colors.gray.300');
-  box-shadow: theme('boxShadow.lg');
+  border-color: var(--color-primary-light);
+  background-color: var(--color-gray-300);
+  box-shadow: var(--boxShadow-lg);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto theme('colors.primary-light');
+  outline: 4px auto var(--color-primary-light);
 }
 
 /* Dark mode button styling */
 html.dark button {
-  background-color: theme('colors.gray.700'); /* Default dark mode button background */
-  color: theme('colors.gray.200'); /* Default dark mode button text */
+  background-color: var(--color-gray-700);
+  color: var(--color-gray-200);
 }
 html.dark button:hover {
-  border-color: theme('colors.primary-dark');
-  background-color: theme('colors.gray.600');
+  border-color: var(--color-primary-dark);
+  background-color: var(--color-gray-600);
 }

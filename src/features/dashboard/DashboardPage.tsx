@@ -1,33 +1,27 @@
-// src/features/dashboard/DashboardPage.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Import hooks from other modules to get their data
 import { useTasks } from '../tasks/useTasks';
 import { useNotes } from '../notes/useNotes';
 import { usePomodoro } from '../../hooks/usePomodoro';
 import { useHabits } from '../habits/useHabits';
 
 const DashboardPage: React.FC = () => {
-    // Fetch data from all modules
     const { tasks } = useTasks();
     const { notes } = useNotes();
     const { completedCyclesToday } = usePomodoro();
     const { habits } = useHabits();
 
-    // --- Calculate Dashboard Statistics ---
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to start of day
-    const todayFormatted = today.toISOString().slice(0, 10); // YYYY-MM-DD
+    today.setHours(0, 0, 0, 0);
+    const todayFormatted = today.toISOString().slice(0, 10);
 
-    // 1. Number of tasks due today
     const tasksDueToday = tasks.filter(
         (task) => task.dueDate === todayFormatted && task.status === 'Pending'
     ).length;
 
-    // 2. Number of completed tasks this week
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay()); // Go back to Sunday (or Monday if you adjust getDay())
+    startOfWeek.setDate(today.getDate() - today.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
 
     const completedTasksThisWeek = tasks.filter(
@@ -35,72 +29,71 @@ const DashboardPage: React.FC = () => {
             task.status === 'Completed' && new Date(task.dueDate).getTime() >= startOfWeek.getTime()
     ).length;
 
-    // 3. Number of focus sessions completed today (directly from usePomodoro)
-    //    completedCyclesToday is already handled by usePomodoro for daily reset.
 
-    // 4. Number of habits marked today
     const habitsMarkedToday = habits.filter(habit =>
         habit.completionDates.includes(todayFormatted)
     ).length;
 
-    // --- Dashboard Card Data ---
     const dashboardCards = [
         {
             title: 'Tasks Due Today',
-            value: tasksDueToday,
+            value: tasksDueToday ?? 0,
             unit: 'tasks',
             link: '/tasks',
-            bgColor: 'bg-blue-500', // Using Tailwind's default shades for specific modules
+            bgColor: 'bg-blue-DEFAULT',
+            hoverBgColor: 'hover:bg-blue-dark',
             icon: '🧾'
         },
         {
             title: 'Tasks Completed This Week',
-            value: completedTasksThisWeek,
+            value: completedTasksThisWeek ?? 0,
             unit: 'tasks',
             link: '/tasks',
-            bgColor: 'bg-teal-500',
+            bgColor: 'bg-blue-DEFAULT',
+            hoverBgColor: 'hover:bg-blue-dark',
             icon: '✅'
         },
         {
             title: 'Focus Sessions Today',
-            value: completedCyclesToday,
+            value: completedCyclesToday ?? 0,
             unit: 'cycles',
             link: '/focus-timer',
-            bgColor: 'bg-indigo-500',
+            bgColor: 'bg-indigo-DEFAULT',
+            hoverBgColor: 'hover:bg-indigo-dark',
             icon: '⏱️'
         },
         {
             title: 'Habits Marked Today',
-            value: habitsMarkedToday,
+            value: habitsMarkedToday ?? 0,
             unit: 'habits',
             link: '/habits',
-            bgColor: 'bg-green-500',
+            bgColor: 'bg-green-DEFAULT',
+            hoverBgColor: 'hover:bg-green-dark',
             icon: '📅'
         },
         {
             title: 'Total Notes',
-            value: notes.length,
+            value: notes.length ?? 0,
             unit: 'notes',
             link: '/notes',
-            bgColor: 'bg-purple-500',
+            bgColor: 'bg-purple-DEFAULT',
+            hoverBgColor: 'hover:bg-purple-dark',
             icon: '📝'
         },
     ];
 
     return (
-        <div className="p-8 bg-app-light dark:bg-app-dark min-h-screen font-roboto text-text-light dark:text-text-dark transition-colors duration-200">
+        <div className="p-4 sm:p-8 min-h-[calc(100vh-64px)]">
             <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 text-primary-darker-light dark:text-primary-lighter-dark">Your Productivity Dashboard</h1>
 
-            {/* Dashboard Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
                 {dashboardCards.map((card) => (
                     <Link
                         key={card.title}
                         to={card.link}
-                        // Dynamic background, text, shadow, rounded, padding, hover effects
-                        className={`${card.bgColor} text-white p-6 md:p-8 rounded-lg shadow-lg flex flex-col items-center justify-center text-center
-                                     hover:scale-105 transition-transform duration-200 ease-in-out cursor-pointer
-                                     border border-transparent hover:border-primary-light dark:hover:border-primary-dark`}
+                        className={`${card.bgColor} ${card.hoverBgColor} text-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col items-center justify-center text-center
+                                     hover:scale-[1.02] transition-all duration-200 ease-in-out cursor-pointer
+                                     border border-transparent hover:border-white dark:hover:border-gray-300`}
                     >
                         <div className="text-5xl md:text-6xl mb-4">{card.icon}</div>
                         <h2 className="text-xl md:text-2xl font-semibold mb-2">{card.title}</h2>
@@ -110,35 +103,46 @@ const DashboardPage: React.FC = () => {
                 ))}
             </div>
 
-            {/* Quick Actions */}
             <div className="max-w-6xl mx-auto mt-16 text-center">
                 <h2 className="text-2xl font-bold mb-8 text-text-light dark:text-text-dark">Quick Actions</h2>
-                <div className="flex flex-wrap justify-center gap-6">
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
                     <Link
                         to="/tasks"
-                        className="px-8 py-4 bg-primary-light text-white rounded-lg shadow-md hover:bg-primary-darker-light transition-all duration-200 ease-in-out transform hover:scale-105
-                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark"
+                        className="px-6 py-3 sm:px-8 sm:py-4 bg-primary-light text-white rounded-lg shadow-md
+                                   hover:bg-primary-darker-light dark:bg-primary-dark dark:hover:bg-primary-lighter-dark
+                                   transition-all duration-200 ease-in-out transform hover:scale-105
+                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark
+                                   text-base sm:text-lg font-semibold w-full sm:w-auto"
                     >
                         Go to Tasks
                     </Link>
                     <Link
                         to="/notes"
-                        className="px-8 py-4 bg-primary-light text-white rounded-lg shadow-md hover:bg-primary-darker-light transition-all duration-200 ease-in-out transform hover:scale-105
-                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark"
+                        className="px-6 py-3 sm:px-8 sm:py-4 bg-primary-light text-white rounded-lg shadow-md
+                                   hover:bg-primary-darker-light dark:bg-primary-dark dark:hover:bg-primary-lighter-dark
+                                   transition-all duration-200 ease-in-out transform hover:scale-105
+                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark
+                                   text-base sm:text-lg font-semibold w-full sm:w-auto"
                     >
                         Go to Notes
                     </Link>
                     <Link
                         to="/focus-timer"
-                        className="px-8 py-4 bg-primary-light text-white rounded-lg shadow-md hover:bg-primary-darker-light transition-all duration-200 ease-in-out transform hover:scale-105
-                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark"
+                        className="px-6 py-3 sm:px-8 sm:py-4 bg-primary-light text-white rounded-lg shadow-md
+                                   hover:bg-primary-darker-light dark:bg-primary-dark dark:hover:bg-primary-lighter-dark
+                                   transition-all duration-200 ease-in-out transform hover:scale-105
+                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark
+                                   text-base sm:text-lg font-semibold w-full sm:w-auto"
                     >
                         Go to Timer
                     </Link>
                     <Link
                         to="/habits"
-                        className="px-8 py-4 bg-primary-light text-white rounded-lg shadow-md hover:bg-primary-darker-light transition-all duration-200 ease-in-out transform hover:scale-105
-                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark"
+                        className="px-6 py-3 sm:px-8 sm:py-4 bg-primary-light text-white rounded-lg shadow-md
+                                   hover:bg-primary-darker-light dark:bg-primary-dark dark:hover:bg-primary-lighter-dark
+                                   transition-all duration-200 ease-in-out transform hover:scale-105
+                                   border border-transparent hover:border-primary-darker-light dark:hover:border-primary-lighter-dark
+                                   text-base sm:text-lg font-semibold w-full sm:w-auto"
                     >
                         Go to Habits
                     </Link>

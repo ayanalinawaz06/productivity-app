@@ -1,4 +1,3 @@
-// src/features/habits/HabitsPage.tsx
 import React, { useState } from 'react';
 import HabitForm from '../../components/HabitForm';
 import HabitGrid from '../../components/HabitGrid';
@@ -15,7 +14,7 @@ const HabitsPage: React.FC = () => {
     const handleAddHabit = (newHabitData: Omit<Habit, 'id' | 'completionDates'>) => {
         addHabit(newHabitData);
         setIsFormVisible(false);
-        toast.success('Habit added successfully!'); // Added toast
+        toast.success('Habit added successfully!');
     };
 
     const handleEditHabit = (habit: Habit) => {
@@ -45,20 +44,19 @@ const HabitsPage: React.FC = () => {
     const handleToggleHabitCompletion = (habitId: string, date: string) => {
         toggleHabitCompletion(habitId, date);
         const habit = habits.find(h => h.id === habitId);
-        if (habit && !habit.completionDates.includes(date)) { // If it was just marked complete
-            toast.success(`Habit "${habit.title}" marked complete for today!`); // Added toast
-        } else {
-            toast(`Habit "${habit?.title}" unmarked for today.`); // Added toast
+        // Determine if the habit was just marked complete or unmarked
+        const wasCompleted = habit?.completionDates.includes(date); // Check BEFORE the toggle updates the state
+        if (habit) {
+            if (!wasCompleted) { // If it was just completed
+                toast.success(`Habit "${habit.title}" marked complete for ${new Date(date).toLocaleDateString()}!`);
+            } else { // If it was just unmarked
+                toast(`Habit "${habit.title}" unmarked for ${new Date(date).toLocaleDateString()}.`);
+            }
         }
     };
 
-    // Get today's date in YYYY-MM-DD format for use with toggleHabitCompletion
-    const getTodayFormattedDate = () => {
-        return new Date().toISOString().slice(0, 10);
-    };
-
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-800 min-h-screen">
+        <div className="p-4 sm:p-6 min-h-[calc(100vh-64px)]">
             <h1 className="text-4xl font-extrabold text-center mb-8 text-green-700 dark:text-green-400">Habit Tracker</h1>
 
             <div className="max-w-4xl mx-auto mb-8">
@@ -87,9 +85,9 @@ const HabitsPage: React.FC = () => {
                 <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Your Habits</h2>
                 <HabitGrid
                     habits={habits}
-                    onToggleCompletion={handleToggleHabitCompletion} // Use local handler for toast
+                    onToggleCompletion={handleToggleHabitCompletion}
                     onEdit={handleEditHabit}
-                    onDelete={handleDeleteHabit} // Use local handler for toast
+                    onDelete={handleDeleteHabit}
                     calculateStreak={calculateStreak}
                 />
             </div>

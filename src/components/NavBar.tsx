@@ -13,18 +13,20 @@ const Navbar: React.FC = () => {
     { path: '/habits', name: 'Habits' },
   ];
 
+  const navBgColor = theme === 'light' ? '#60A5FA' : '#3B82F6';
+
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center px-8">
-      <div className="flex space-x-4">
+    <nav style={{ backgroundColor: navBgColor }} className="shadow-lg p-4 flex flex-col md:flex-row justify-between items-center px-4 sm:px-8 rounded-b-lg">
+      <div className="flex flex-wrap justify-center md:justify-start gap-2 sm:gap-4 mb-2 md:mb-0">
         {navLinks.map((link) => (
           <NavLink
             key={link.path}
             to={link.path}
             className={({ isActive }) =>
-              `px-3 py-2 rounded-md text-sm font-medium ${
+              `px-3 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                 isActive
-                  ? 'bg-blue-500 text-white'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-primary-darker-light text-white shadow-md dark:bg-primary-dark'
+                  : 'text-white hover:bg-primary-darker-light dark:hover:bg-primary-lighter-dark'
               }`
             }
           >
@@ -35,7 +37,10 @@ const Navbar: React.FC = () => {
 
       <button
         onClick={toggleTheme}
-        className="px-3 py-2 rounded-md text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        className="px-4 py-2 rounded-full text-sm font-medium
+                   bg-white text-primary-dark dark:bg-gray-700 dark:text-white
+                   hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-sm
+                   mt-2 md:mt-0"
       >
         {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
       </button>

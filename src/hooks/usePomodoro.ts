@@ -52,16 +52,14 @@ export function usePomodoro() {
             if (timerMode === 'focus') {
                 setPomodoroStats((prevStats) => ({
                     ...prevStats,
-                    cycles: prevStats.cycles + 1,
+                    cycles: (prevStats.cycles || 0) + 1, // Ensure cycles is a number
                 }));
                 setTimerMode('break');
                 setTimeLeft(breakDuration);
-                // ADDED TOAST MESSAGE FOR FOCUS SESSION COMPLETE
                 toast.success(`Focus session complete! Take a ${breakDuration / 60}-minute break. 🎉`);
             } else {
                 setTimerMode('focus');
                 setTimeLeft(focusDuration);
-                // ADDED TOAST MESSAGE FOR BREAK SESSION COMPLETE
                 toast(`Break session complete! Time to focus for ${focusDuration / 60} minutes.`);
             }
             setIsRunning(false); // Pause after each segment, user can manually start next
@@ -104,16 +102,14 @@ export function usePomodoro() {
         if (timerMode === 'focus') {
             setPomodoroStats((prevStats) => ({
                 ...prevStats,
-                cycles: prevStats.cycles + 1,
+                cycles: (prevStats.cycles || 0) + 1, // Ensure cycles is a number
             }));
             setTimerMode('break');
             setTimeLeft(breakDuration);
-            // ADDED TOAST MESSAGE FOR SKIPPING FOCUS SESSION
             toast.success(`Focus session skipped! Taking a ${breakDuration / 60}-minute break. 🎉`);
         } else {
             setTimerMode('focus');
             setTimeLeft(focusDuration);
-            // ADDED TOAST MESSAGE FOR SKIPPING BREAK SESSION
             toast(`Break session skipped! Time to focus for ${focusDuration / 60} minutes.`);
         }
         setIsRunning(false);
@@ -130,7 +126,7 @@ export function usePomodoro() {
 
     return {
         timeLeft: formatTime(timeLeft),
-        rawTimeLeft: timeLeft, // Provide raw time for progress bar calculations if needed
+        rawTimeLeft: timeLeft,
         isRunning,
         timerMode,
         startTimer,
@@ -138,9 +134,9 @@ export function usePomodoro() {
         resetTimer,
         toggleTimer,
         skipSegment,
-        completedCyclesToday: pomodoroStats.cycles,
-        setFocusDuration, // For optional custom durations
-        setBreakDuration, // For optional custom durations
+        completedCyclesToday: pomodoroStats.cycles ?? 0,
+        setFocusDuration,
+        setBreakDuration,
         focusDuration,
         breakDuration,
         DEFAULT_FOCUS_DURATION,

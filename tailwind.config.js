@@ -47,7 +47,37 @@ export default {
           light: '#FDE68A',
           DEFAULT: '#FBBF24',
           dark: '#D97706',
-        }
+        },
+
+        // Define CSS variables for global use (e.g., in index.css)
+        // These will be compiled as `--color-name: #hexvalue;`
+        'css': {
+          'app-light': 'var(--color-app-light)',
+          'text-light': 'var(--color-text-light)',
+          'primary-light': 'var(--color-primary-light)',
+          'primary-darker-light': 'var(--color-primary-darker-light)',
+          'border-light': 'var(--color-border-light)',
+          'app-dark': 'var(--color-app-dark)',
+          'text-dark': 'var(--color-text-dark)',
+          'primary-dark': 'var(--color-primary-dark)',
+          'primary-lighter-dark': 'var(--color-primary-lighter-dark)',
+          'border-dark': 'var(--color-border-dark)',
+          'blue-DEFAULT': 'var(--color-blue-DEFAULT)',
+          'blue-light': 'var(--color-blue-light)',
+          'blue-dark': 'var(--color-blue-dark)',
+          'purple-DEFAULT': 'var(--color-purple-DEFAULT)',
+          'purple-light': 'var(--color-purple-light)',
+          'purple-dark': 'var(--color-purple-dark)',
+          'indigo-DEFAULT': 'var(--color-indigo-DEFAULT)',
+          'indigo-light': 'var(--color-indigo-light)',
+          'indigo-dark': 'var(--color-indigo-dark)',
+          'green-DEFAULT': 'var(--color-green-DEFAULT)',
+          'green-light': 'var(--color-green-light)',
+          'green-dark': 'var(--color-green-dark)',
+          'yellow-DEFAULT': 'var(--color-yellow-DEFAULT)',
+          'yellow-light': 'var(--color-yellow-light)',
+          'yellow-dark': 'var(--color-yellow-dark)',
+        },
       },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'], // Define Roboto font family
